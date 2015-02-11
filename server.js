@@ -9,7 +9,7 @@ var HTTP_PORT = 3000,
     HTTPS_PORT = 4443,
     SSL_OPTS = {
       key: fs.readFileSync(path.resolve(__dirname,'.ssl/www.example.com.key')),
-	  cert: fs.readFileSync(path.resolve(__dirname,'.ssl/www.example.com.cert'))
+      cert: fs.readFileSync(path.resolve(__dirname,'.ssl/www.example.com.cert'))
     };
 
 /*
@@ -39,10 +39,10 @@ var allowCrossDomain = function(req, res, next) {
 
 // trim string value and enclose it with double quotes if needed
 var parseValue = function(value) {
-  if (typeof value === "string") {
+  if (typeof value === 'string') {
     // trim
     value = value.replace(/^\s+|\s+$/g, '');
-    if (value === "") {
+    if (value === '') {
       value = '""';
     } else if (value.split(' ').length > 1) {
       // enclose with "" if needed
@@ -71,22 +71,22 @@ var parseDataQuery = function(req, debug) {
 // create single event based on data which includes time, event & properties
 var createAndLogEvent = function(data, req) {
   var time = (data && data.t) || new Date().toISOString(),
-      event = (data && data.e) || "unknown",
+      event = (data && data.e) || 'unknown',
       properties = (data && data.kv) || {};
 
   // append some request headers (ip, referrer, user-agent) to list of properties
   properties.ip = req.ip;
-  properties.origin = (req.get("Origin")) ? req.get("Origin").replace(/^https?:\/\//, '') : "";
-  properties.page = req.get("Referer");
-  properties.useragent = req.get("User-Agent");
+  properties.origin = (req.get('Origin')) ? req.get('Origin').replace(/^https?:\/\//, '') : '';
+  properties.page = req.get('Referer');
+  properties.useragent = req.get('User-Agent');
 
   // log event data in splunk friendly timestamp + key/value(s) format
-  var entry = time + " event=" + parseValue(event);
+  var entry = time + ' event=' + parseValue(event);
   for (var key in properties) {
     var value = parseValue(properties[key]);
-    entry += " " + key + "=" + value;
+    entry += ' ' + key + '=' + value;
   }
-  entry += "\n";
+  entry += '\n';
   fs.appendFile(path.resolve(__dirname, './events.log'), entry, function(err) {
     if (err) {
       console.log(err);
@@ -134,14 +134,14 @@ app.get('/t.gif', function(req, res) {
   // data query param optional here
   var data = parseDataQuery(req) || {};
   // fill in default success event if none specified
-  if (!data.e) { data.e = "success";}
+  if (!data.e) { data.e = 'success';}
   createAndLogEvent(data, req);
   res.sendfile(path.resolve(__dirname, './t.gif'));
 });
 
 // root
 app.get('/', function(req, res) {
-  res.send("");
+  res.send('');
 });
 
 var pidFile = path.resolve(__dirname, './pid.txt');
