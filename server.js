@@ -42,7 +42,7 @@ var parseValue = function(value) {
   if (typeof value === "string") {
     // trim
     value = value.replace(/^\s+|\s+$/g, '');
-    if (value == "") {
+    if (value === "") {
       value = '""';
     } else if (value.split(' ').length > 1) {
       // enclose with "" if needed
@@ -50,23 +50,23 @@ var parseValue = function(value) {
     }
   }
   return value;
-}
+};
 
 // decode and parse query param param
 var parseDataQuery = function(req, debug) {
   if (!req.query.data) {
-    if (debug) { console.error('No \'data\' query param defined!') };
+    if (debug) { console.error('No \'data\' query param defined!'); }
     return false;
   }
   var data = {};
   try {
     data = JSON.parse(decodeURIComponent(req.query.data));
   } catch (e) {
-    if (debug) { console.error('Failed to JSON parse \'data\' query param') };
+    if (debug) { console.error('Failed to JSON parse \'data\' query param'); }
     return false;
   }
   return data;
-}
+};
 
 // create single event based on data which includes time, event & properties
 var createAndLogEvent = function(data, req) {
@@ -94,7 +94,7 @@ var createAndLogEvent = function(data, req) {
       //console.log("Logged tracked data");
     }
   });
-}
+};
 
 /*
  * Use Middlewares
@@ -145,7 +145,7 @@ app.get('/', function(req, res) {
 });
 
 var pidFile = path.resolve(__dirname, './pid.txt');
-fs.writeFileSync(pidFile, process.pid, 'utf-8'); 
+fs.writeFileSync(pidFile, process.pid, 'utf-8');
 
 // Create an HTTP service.
 http.createServer(app).listen(HTTP_PORT,function() {
