@@ -139,6 +139,20 @@ app.get('/t.gif', function(req, res) {
   res.sendfile(path.resolve(__dirname, './t.gif'));
 });
 
+// sp.js client library
+app.get('/sp.js', function(req, res) {
+  res.setHeader('Content-Type', 'application/javascript');
+  res.setHeader('Cache-Control', 'private, no-cache, no-cache=Set-Cookie, proxy-revalidate');
+  res.setHeader('Expires', 'Sat, 01 Jan 2000 12:00:00 GMT');
+  res.setHeader('Pragma', 'no-cache');
+  // data query param optional here
+  var data = parseDataQuery(req) || {};
+  // fill in default success event if none specified
+  if (!data.e) { data.e = 'success'; }
+  createAndLogEvent(data, req);
+  res.sendfile(path.resolve(__dirname, './sp.js'));
+});
+
 // root
 app.get('/', function(req, res) {
   res.send('');
