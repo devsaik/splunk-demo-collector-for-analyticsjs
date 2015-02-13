@@ -4,6 +4,17 @@ var path = require('path');
 var http = require('http');
 var https = require('https');
 var app = express();
+var argv = require('minimist')(process.argv.slice(2));
+
+/**
+ * When running in Docker, send all non-Splunk event logs to stderr.
+ * Use console.info() to send logs to stdout and thus to Splunk.
+ */
+if (argv.docker) {
+  console.log = function() {
+    console.error.apply(console, arguments);
+  };
+}
 
 var HTTP_PORT = 3000,
     HTTPS_PORT = 4443,
@@ -86,21 +97,30 @@ var createAndLogEvent = function(data, req) {
     var value = parseValue(properties[key]);
     entry += ' ' + key + '=' + value;
   }
-  entry += '\n';
-  fs.appendFile(path.resolve(__dirname, './events.log'), entry, function(err) {
-    if (err) {
-      console.log(err);
-    } else {
-      //console.log("Logged tracked data");
-    }
-  });
+  if (argv.docker) {
+    console.info(entry);
+  } else {
+    entry += '\n';
+    fs.appendFile(path.resolve(__dirname, './events.log'), entry, function(err) {
+      if (err) {
+        console.error(err);
+      } else if (argv.debug) {
+        console.log('Logged tracked data');
+      }
+    });
+  }
 };
 
 /*
  * Use Middlewares
  **********************************
  */
-app.use(express.logger());
+if (argv.docker) {
+  var morgan = require('morgan');
+  app.use(morgan('combined', { stream: process.stderr }));
+} else {
+  app.use(express.logger());
+}
 //app.use(express.compress());
 app.use(allowCrossDomain);
 app.use(function(err, req, res, next) {
@@ -118,7 +138,7 @@ app.get('/track', function(req, res) {
   res.setHeader('Content-Type', 'application/json');
   var data;
   // data query param required here
-  if ((data = parseDataQuery(req, true)) === false) {
+  if ((data = parseDataQuery(req, argv.debug)) === false) {
     res.send('0');
   }
   createAndLogEvent(data, req);
