@@ -325,7 +325,10 @@ var sp = (function(self, undefined) {
       name : document.title,
       referrer : document.referrer
     };
-    return self.track(defaultEventName, props);
+    if (settings.track_pageview) {
+      return self.track(defaultEventName, props);
+    }
+    return 1;
   };
 
   /**
