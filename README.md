@@ -106,7 +106,7 @@ Parameters:
 ```js
 sp.init({
 	api_host: <YOUR_COLLECTOR_URL>	// typically set via sp.load(YOUR_COLLECTOR_URL)
-	tracking_pageview: true,		// default to tracking all page views
+	track_pageview: true,			// default to tracking all page views
 	track_links_timeout: 300,		// default to 300ms
 	cookie_name: "_sp",				// defaults to "_sp"
 	cookie_expiration: 365,			// defaults to 365 days
