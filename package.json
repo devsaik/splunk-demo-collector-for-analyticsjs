@@ -9,6 +9,6 @@
     "morgan": "1.5.1"
   },
   "scripts": {
-    "start": "node server.js --docker"
+    "start": "node server.js"
   }
 }

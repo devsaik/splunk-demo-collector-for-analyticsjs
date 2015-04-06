@@ -101,7 +101,7 @@ var createAndLogEvent = function(data, req) {
     console.info(entry);
   } else {
     entry += '\n';
-    fs.appendFile(path.resolve(__dirname, './events.log'), entry, function(err) {
+    fs.appendFile(path.resolve(__dirname, './logs/events.log'), entry, function(err) {
       if (err) {
         console.error(err);
       } else if (argv.debug) {

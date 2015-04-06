@@ -1,6 +1,6 @@
 ## Backend Collector for Client-Side Data
 This is a Node.js backend collector for client-side data that is tracked by [sp.js](#appendix-how-to-use-spjs-analytics-javascript-library) Analytics JavaScript library.
-All tracked events are collected in events.log following [logging best practices](http://dev.splunk.com/view/logging-best-practices/SP-CAAADP6) for Splunk log ingestion.
+All tracked events are collected in logs/events.log following [logging best practices](http://dev.splunk.com/view/logging-best-practices/SP-CAAADP6) for Splunk log ingestion.
 
 Refer to [appendix](#appendix-how-to-use-spjs-analytics-javascript-library) below on how to use sp.js simple API for tracking.
 
@@ -25,7 +25,7 @@ Refer to [appendix](#appendix-how-to-use-spjs-analytics-javascript-library) belo
     	Listening to HTTPS on port 4443
 
 That's it!
-After pointing sp.js library to your collector server address using `sp.load(<YOUR_COLLECTOR_URL>)`, watch the tracked events being collected in newly created local file **events.log**
+After pointing sp.js library to your collector server address using `sp.load(<YOUR_COLLECTOR_URL>)`, watch the tracked events being collected in newly created local file **logs/events.log**
 
 ### Additional Resources
 
