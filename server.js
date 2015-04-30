@@ -66,8 +66,12 @@ var parseValue = function(value) {
 // decode and parse query param param
 var parseDataQuery = function(req, debug) {
   if (!req.query.data) {
-    if (debug) { console.error('No \'data\' query param defined!'); }
-    return false;
+    if (req.body) {
+      return req.body;
+    } else {
+      if (debug) { console.error('No \'data\' query param defined!'); }
+      return false;
+    }
   }
   var data = {};
   try {
@@ -123,6 +127,7 @@ if (argv.docker) {
 }
 //app.use(express.compress());
 app.use(allowCrossDomain);
+app.use(express.bodyParser());
 app.use(function(err, req, res, next) {
   console.error(err.stack);
   res.send(500, 'Something broke!');
@@ -134,16 +139,21 @@ app.use(function(err, req, res, next) {
  */
 
 // API endpoint tracking
-app.get('/track', function(req, res) {
+
+var handler = function(req, res) {
   res.setHeader('Content-Type', 'application/json');
   var data;
   // data query param required here
   if ((data = parseDataQuery(req, argv.debug)) === false) {
     res.send('0');
+  } else {
+    createAndLogEvent(data, req);
+    res.send('1');
   }
-  createAndLogEvent(data, req);
-  res.send('1');
-});
+};
+
+app.get('/track', handler);
+app.post('/track', handler);
 
 // IMG beacon tracking - data query optional
 app.get('/t.gif', function(req, res) {
