@@ -116,4 +116,5 @@ sp.init({
 Parameters:
 * `settings`: settings object to apply one more custom configurations to sp.js. For most purposes, default values are applicable.
 
-
+License:
+Released under MIT license
